@@ -99,7 +99,7 @@ fn main() {
             println!("Finished Julia Set in {:.1} seconds", start_time.elapsed().unwrap().as_secs_f32());
         },
         Err(_) => {
-            println!("Failed to make video!");
+            println!("Failed to make video! Do you have FFmpeg installed to PATH on your system?");
         },
     } 
     match fs::remove_dir_all("./imgs") {
@@ -114,6 +114,9 @@ fn main() {
         .template("[{elapsed_precise}] [{bar:40.cyan/blue}] {pos}/{len} ({eta})")
         .progress_chars("=>-"));
     let start_time = SystemTime::now();
+    let mut img = RgbImage::new(x_size, y_size);
+    let x_limits: [f64; 2] = [-1.5, 1.5];
+    let y_limits: [f64; 2] = [-1.5, 1.5];
     
     for y in 0..y_size {
         pb.set_position(y as u64);
@@ -135,6 +138,9 @@ fn main() {
         .template("[{elapsed_precise}] [{bar:40.cyan/blue}] {pos}/{len} ({eta})")
         .progress_chars("=>-"));
     let start_time = SystemTime::now();
+    let x_limits: [f64; 2] = [0.12, 0.22];
+    let y_limits: [f64; 2] = [-0.65, -0.55];
+    let mut img = RgbImage::new(x_size, y_size);
     
     for y in 0..y_size {
         pb.set_position(y as u64);
@@ -143,33 +149,35 @@ fn main() {
             let cx = x as f64 * (x_limits[1] - x_limits[0]) / x_size as f64 + x_limits[0];
             let c: Complex<f64> = Complex::new(cx, cy);
             let mandelbrot_num = fractals::mandelbrot(c, Complex::new(0.0, 0.0), 1, max_iterations);
-            if mandelbrot_num == 1 || mandelbrot_num == 6 {
+            let final_num = mandelbrot_num.to_string().chars().last().unwrap().to_string().parse::<u32>().unwrap();
+
+            let purple = Rgb([159, 0, 255]);
+            let green = Rgb([0, 178, 51]);
+            let yellow = Rgb([255, 237, 0]);
+            let red = Rgb([255, 63, 49]);
+            let blue = Rgb([0, 205, 255]);
+
+            if final_num == 0 {
+                img.put_pixel(x, y, blue);
+            } else if final_num == 1 {
                 img.put_pixel(x, y, Rgb([255, 255, 255]));
-            } else if mandelbrot_num == 0 {
-                img.put_pixel(x, y, Rgb([159, 0, 255]));
-            } else if mandelbrot_num == 2 {
-                img.put_pixel(x, y, Rgb([0, 178, 51]));
-            } else if mandelbrot_num == 3 {
-                img.put_pixel(x, y, Rgb([255, 237, 0]));
-            } else if mandelbrot_num == 4 {
-                img.put_pixel(x, y, Rgb([255, 63, 49]));
-            } else if mandelbrot_num == 5 {
-                img.put_pixel(x, y, Rgb([0, 205, 255]));
-            } else if mandelbrot_num == 6 {
-                img.put_pixel(x, y, Rgb([159, 0, 255]));
-            } else if mandelbrot_num == 7 {
-                img.put_pixel(x, y, Rgb([0, 178, 51]));
-            } else if mandelbrot_num == 8 {
-                img.put_pixel(x, y, Rgb([255, 237, 0]));
-            } else if mandelbrot_num == 9 {
-                img.put_pixel(x, y, Rgb([255, 63, 49]));
-            } else if mandelbrot_num == 10 {
-                img.put_pixel(x, y, Rgb([0, 205, 255]));
-            } else if mandelbrot_num >= 11 && mandelbrot_num <= 254 {
-                img.put_pixel(x, y, Rgb([255, 255, 255]));
-            } else if mandelbrot_num > 254 {
-                img.put_pixel(x, y, Rgb([0, 178, 51]));
-            }
+            } else if final_num == 2 {
+                img.put_pixel(x, y, green);
+            } else if final_num == 3 {
+                img.put_pixel(x, y, yellow);
+            } else if final_num == 4 {
+                img.put_pixel(x, y, red);
+            } else if final_num == 5 {
+                img.put_pixel(x, y, blue);
+            } else if final_num == 6 {
+                img.put_pixel(x, y, purple);
+            } else if final_num == 7 {
+                img.put_pixel(x, y, green);
+            } else if final_num == 8 {
+                img.put_pixel(x, y, yellow);
+            } else if final_num == 9 {
+                img.put_pixel(x, y, red);
+            } 
         }
     }
     img.save("Mandelbrot.png").expect("Image failed to save.");
