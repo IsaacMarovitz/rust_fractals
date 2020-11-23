@@ -1,0 +1,13 @@
+[package]
+name = "rust_fractals"
+version = "0.1.0"
+authors = ["Isaac Marovitz <42140194+IsaacMarovitz@users.noreply.github.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+num = "0.3.0"
+image = "0.23.10"
+indicatif = "0.15.0"
+crossterm = "0.18.1"
