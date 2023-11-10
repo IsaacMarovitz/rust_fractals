@@ -7,7 +7,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-num = "0.3.0"
-image = "0.23.10"
-indicatif = "0.15.0"
-crossterm = "0.18.1"
+num = "0.4.1"
+image = "0.24.7"
+indicatif = "0.17.7"
+crossterm = "0.27.0"

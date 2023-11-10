@@ -38,8 +38,8 @@ fn input(message: &str, failure_message: &str) -> u32 {
 fn main() {
     io::stdout().execute(terminal::Clear(terminal::ClearType::All)).unwrap();
 
-    let x_size = input("Input x size: ", "Only input intergers!");
-    let y_size = input("Input y size: ", "Only input intergers!");
+    let x_size = input("Input x size: ", "Only input integers!");
+    let y_size = input("Input y size: ", "Only input integers!");
     let x_limits: [f64; 2] = [-2.0, 2.0];
     let y_limits: [f64; 2] = [-2.0, 2.0];
     let escape_radius = 10;
@@ -47,7 +47,7 @@ fn main() {
     let mut img = RgbImage::new(x_size, y_size);
     let start_time = SystemTime::now();
 
-    let max: f64 = f64::consts::PI * 2 as f64;
+    let max: f64 = f64::consts::PI * 2f64;
     let step = 0.01;
     let mut current: f64 = 0.0;
     let mut i: u32 = 0;
@@ -70,7 +70,7 @@ fn main() {
     // Render Video
     println!("Rendering a {:?} x {:?} animation of the Julia Set", x_size, y_size);
     pb.set_style(ProgressStyle::default_bar()
-        .template("[{elapsed_precise}] [{bar:40.cyan/blue}] {pos}/{len} ({eta})")
+        .template("[{elapsed_precise}] [{bar:40.cyan/blue}] {pos}/{len} ({eta})").expect("Failed to make progress style.")
         .progress_chars("=>-"));
     
     while current < max {
@@ -80,7 +80,7 @@ fn main() {
             for x in 0..x_size {
                 let cx = x as f64 * (x_limits[1] - x_limits[0]) / x_size as f64 + x_limits[0];
                 let julia_num: u32 = fractals::julia([current.cos(), current.sin()], [cx, cy], escape_radius, max_iterations);
-                img.put_pixel(x, y, Rgb(colour::hsl_to_rgb((julia_num as f32*15.0/255.0*360.0) as u32, 100.0, 50.0)));
+                img.put_pixel(x, y, Rgb(colour::hsl_to_rgb(julia_num as f32 * 15.0 / 255.0 * 360.0, 100.0, 50.0)));
             }
         }
         img.save("./imgs/".to_owned() + &i.to_string() + ".png").expect("Image failed to save.");
@@ -99,7 +99,7 @@ fn main() {
             println!("Finished Julia Set in {:.1} seconds", start_time.elapsed().unwrap().as_secs_f32());
         },
         Err(_) => {
-            println!("Failed to make video! Do you have FFmpeg installed to PATH on your system?");
+            println!("Failed to make video! Do you have ffmpeg installed to PATH on your system?");
         },
     } 
     match fs::remove_dir_all("./imgs") {
@@ -111,7 +111,7 @@ fn main() {
     println!("Rendering image of the Julia Set");
     let pb = ProgressBar::new(x_size as u64);
     pb.set_style(ProgressStyle::default_bar()
-        .template("[{elapsed_precise}] [{bar:40.cyan/blue}] {pos}/{len} ({eta})")
+        .template("[{elapsed_precise}] [{bar:40.cyan/blue}] {pos}/{len} ({eta})").expect("Failed to make progress style.")
         .progress_chars("=>-"));
     let start_time = SystemTime::now();
     let mut img = RgbImage::new(x_size, y_size);
@@ -135,7 +135,7 @@ fn main() {
     println!("Rendering image of the Mandelbrot Set");
     let pb = ProgressBar::new(x_size as u64);
     pb.set_style(ProgressStyle::default_bar()
-        .template("[{elapsed_precise}] [{bar:40.cyan/blue}] {pos}/{len} ({eta})")
+        .template("[{elapsed_precise}] [{bar:40.cyan/blue}] {pos}/{len} ({eta})").expect("Failed to make progress style.")
         .progress_chars("=>-"));
     let start_time = SystemTime::now();
     let x_limits: [f64; 2] = [0.12, 0.22];
